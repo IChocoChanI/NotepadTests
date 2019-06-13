@@ -18,6 +18,12 @@ public class AnotepadTest {
 
     @Before
     public void openBrowser() {
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("mac")) {
+            System.setProperty("webdriver.chrome.driver", "./chromedriver");
+        } else {
+            System.setProperty("webdriver.chrome.driver", "./chromedriver.exe");
+        }
         driver = new ChromeDriver();
         wait = new WebDriverWait(driver, 7);
     }
