@@ -1,5 +1,7 @@
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -16,14 +18,13 @@ public class AnotepadTest {
     WebDriver driver;
     WebDriverWait wait;
 
+    @BeforeClass
+    public static void setupClass() {
+        WebDriverManager.chromedriver().setup();
+    }
+
     @Before
     public void openBrowser() {
-        String os = System.getProperty("os.name").toLowerCase();
-        if (os.contains("mac")) {
-            System.setProperty("webdriver.chrome.driver", "./chromedriver");
-        } else {
-            System.setProperty("webdriver.chrome.driver", "./chromedriver.exe");
-        }
         driver = new ChromeDriver();
         wait = new WebDriverWait(driver, 7);
     }
