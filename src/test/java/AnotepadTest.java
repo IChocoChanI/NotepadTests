@@ -49,8 +49,8 @@ public class AnotepadTest {
                 .setTitle(TITLE)
                 .addContent(NOTE)
                 .save()
-                .privating()
-                .permitting();
+                .setNoteReadPermission()
+                .endNoteReadPermission();
 
         assertEquals("Private Note", np.getPrivateNoteBtnName());
     }

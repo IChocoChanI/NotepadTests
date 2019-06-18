@@ -14,7 +14,7 @@ public class NotePad {
     private static final By DELETE_NOTE = By.cssSelector(".delete");
     private static final By NOTE_ACCESS_TEXT = By.id("noteAccessText");
     private static final By ACCESS_PRIVATE = By.id("accessPrivate");
-    private static final By PERMITTING = By.cssSelector(".btn.btn-default");
+    private static final By END = By.cssSelector(".btn.btn-default");
 
     private WebDriver driver;
     private WebDriverWait wait;
@@ -60,15 +60,15 @@ public class NotePad {
     }
 
     @Step
-    public NotePad privating() {
+    public NotePad setNoteReadPermission() {
         driver.findElement(NOTE_ACCESS_TEXT).click();
         driver.findElement(ACCESS_PRIVATE).click();
         return this;
     }
 
     @Step
-    public NotePad permitting() {
-        driver.findElement(PERMITTING).click();
+    public NotePad endNoteReadPermission() {
+        driver.findElement(END).click();
         return this;
     }
 
