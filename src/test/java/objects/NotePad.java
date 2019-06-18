@@ -67,7 +67,7 @@ public class NotePad {
     }
 
     @Step
-    public NotePad endNoteReadPermission() {
+    public NotePad closePermissionPopup() {
         driver.findElement(END).click();
         return this;
     }
