@@ -28,7 +28,7 @@ public class AnotepadTest {
 
     @After
     public void closeBrowser() {
-        driver.close();
+        driver.quit();
     }
 
     @Test
