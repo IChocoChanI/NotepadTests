@@ -1,5 +1,9 @@
 # NotepadTests
-Requirements: Maven 2, Java 8, Chrome 74
+Requirements: Gradle, Java 8, Chrome 74
 
 How to run:
-mvn clean install
+gradle clean build
+
+How to report with allure:
+gradle allureReport
+gradle allureServe

@@ -1,22 +1,23 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
+import objects.LoginPage;
+import objects.NotePad;
+import org.junit.*;
+import io.qameta.allure.junit4.DisplayName;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import static org.junit.Assert.assertEquals;
 
 public class AnotepadTest {
 
+    private static final String TITLE = "My new note";
+    private static final String NOTE = "Sample note";
+    private static final String EMAIL = "test@zxcv.com";
+    private static final String PASSWORD = "password";
+
     WebDriver driver;
-    WebDriverWait wait;
+    NotePad np;
+    LoginPage lp;
 
     @BeforeClass
     public static void setupClass() {
@@ -26,31 +27,52 @@ public class AnotepadTest {
     @Before
     public void openBrowser() {
         driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, 7);
+        np = new NotePad(driver);
+        lp = new LoginPage(driver);
     }
 
     @After
     public void closeBrowser() {
-        driver.close();
+        driver.quit();
     }
 
     @Test
+    @DisplayName("Create a note")
     public void testCreatingDeletingNote() {
-        driver.get("https://anotepad.com/");
+        np
+                .open()
+                .setTitle(TITLE)
+                .save();
 
-        driver.findElement(By.id("edit_title")).sendKeys("My New Note");
-        driver.findElement(By.id("btnSaveNote")).click();
+        assertEquals(TITLE, np.getTitleContent());
+    }
 
-        wait.until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector(".alert.alert-warning"), "You have saved your note as"));
+    @Test
+    @DisplayName("GL-523:F-50: Saving Private or Public notes by registered users")
+    public void testPrivateNote() {
+        np
+                .open()
+                .setTitle(TITLE)
+                .addContent(NOTE)
+                .save()
+                .setNoteReadPermission()
+                .closePermissionPopup();
 
-        driver.findElement(By.cssSelector(".delete")).click();
+        assertEquals("Private Note", np.getPrivateNoteBtnName());
+    }
 
-        Alert alert = wait.until(ExpectedConditions.alertIsPresent());
-        driver.switchTo().alert();
-        alert.accept();
+    @Test
+    @DisplayName("Create and login to the account")
+    public void testLogin(){
+        lp
+                .open()
+                .registerEmail(EMAIL)
+                .registerPassword(PASSWORD)
+                .createAccount()
+                .enterEmail(EMAIL)
+                .enterPassword(PASSWORD)
+                .login();
 
-        assertEquals("No note here.", driver.findElement(By.cssSelector(".saved_notes div")).getText());
-
-        driver.findElement(By.cssSelector(".saved_notes div")).getText();
+        Assert.assertEquals("Logout", lp.getLogoutButton());
     }
 }
