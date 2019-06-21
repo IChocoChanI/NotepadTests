@@ -1,4 +1,5 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
+import objects.LoginPage;
 import objects.NotePad;
 import org.junit.*;
 import io.qameta.allure.junit4.DisplayName;
@@ -11,9 +12,12 @@ public class AnotepadTest {
 
     private static final String TITLE = "My new note";
     private static final String NOTE = "Sample note";
+    private static final String EMAIL = "test@zxcv.com";
+    private static final String PASSWORD = "password";
 
     WebDriver driver;
     NotePad np;
+    LoginPage lp;
 
     @BeforeClass
     public static void setupClass() {
@@ -24,6 +28,7 @@ public class AnotepadTest {
     public void openBrowser() {
         driver = new ChromeDriver();
         np = new NotePad(driver);
+        lp = new LoginPage(driver);
     }
 
     @After
@@ -32,6 +37,7 @@ public class AnotepadTest {
     }
 
     @Test
+    @DisplayName("Create a note")
     public void testCreatingDeletingNote() {
         np
                 .open()
@@ -53,5 +59,20 @@ public class AnotepadTest {
                 .closePermissionPopup();
 
         assertEquals("Private Note", np.getPrivateNoteBtnName());
+    }
+
+    @Test
+    @DisplayName("Create and login to the account")
+    public void testLogin(){
+        lp
+                .open()
+                .registerEmail(EMAIL)
+                .registerPassword(PASSWORD)
+                .createAccount()
+                .enterEmail(EMAIL)
+                .enterPassword(PASSWORD)
+                .login();
+
+        Assert.assertEquals("Logout", lp.getLogoutButton());
     }
 }
